@@ -1,7 +1,9 @@
 class TasksController < ApplicationController
+  before_action :require_user_logged_in
   before_action :set_task, only: [:show, :edit, :update, :destroy]
+
   def index
-    @tasks = Task.all
+    @tasks = current_user.Task.all
   end
   
   def show
@@ -12,13 +14,15 @@ class TasksController < ApplicationController
   end
   
   def create
-    @task = Task.new(task_params)
+    @task = current_user.tasks.build(task_params)
+#    @task = Task.new(task_params)
     
     if @task.save
       flash[:success] = 'Task が正常に作成されました'
       redirect_to @task
     else
       flash.now[:danger] = 'Taskが作成されませんでした'
+      render 'toppages/index'
     end
   end
   
@@ -40,7 +44,7 @@ class TasksController < ApplicationController
     @task.destroy
     
     flash[:success] = 'Taskは正常に削除されました'
-    redirect_to tasks_url
+    redirect_to root_url
   end
 
   private
@@ -51,7 +55,7 @@ class TasksController < ApplicationController
   
   # Strong Parameter
   def task_params
-    params.require(:task).permit(:content, :status)
+    params.require(:task).permit(:content, :status, :user_id)
   end
 
 end

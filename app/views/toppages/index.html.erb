@@ -1,0 +1,33 @@
+<% if logged_in? %>
+  <p>ログイン完了ユーザ: <%= current_user.name %></p>
+    <div class="row">
+      <aside class="col-xs-4">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title"><%= @user.name %></h3>
+          </div>
+          <div class="panel-body">
+            <img class="media-object img-rounded img-responsive" src="<%= gravatar_url(@user, {size: 500 }) %>" alt="">
+          </div>
+        </div>
+      </aside>
+      <div class="col-xs-8">
+        <ul class="nav nav-tabs nav-justified">
+          <li><a href="#">タスク一覧</a></li>
+          <div>
+            <%= render 'tasks/taskslist', tasks: @tasks %>
+          </div>
+        </ul>
+      </div>
+    </div>
+<% else %>
+  <div class="center jumbotron">
+    <div class="text-center">
+      <h1>タスク管理</h1>
+    </div>
+    <div class="text-center">
+          <%= link_to 'ログイン', login_path, class: 'btn btn-lg btn-primary' %>
+          <%= link_to '新規登録', signup_path, class: 'btn btn-lg btn-primary' %>
+    </div>
+  </div>
+<% end %>
